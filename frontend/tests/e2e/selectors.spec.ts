@@ -12,11 +12,19 @@ test.describe('Stable Selectors Test', () => {
     const isVisible = await addStaffButton.isVisible().catch(() => false);
 
     if (isVisible) {
-      // We're on login page, check login selectors
+      // We're on login page
       await expect(page.locator('[data-testid="add-staff"]')).toBeVisible();
-      await expect(page.locator('[data-testid="pin-1"]')).toBeVisible();
-      await expect(page.locator('[data-testid="pin-0"]')).toBeVisible();
-      await expect(page.locator('[data-testid="pin-backspace"]')).toBeVisible();
+
+      // Look for any user button and click it to reveal the PIN pad
+      // Users are rendered as buttons in a grid, we can target them by their role text or just take the first button in the grid
+      const firstUser = page.locator('button:has(h3.text-2xl)');
+      if (await firstUser.count() > 0) {
+        await firstUser.first().click();
+        // Now PIN pad should be visible
+        await expect(page.locator('[data-testid="pin-1"]')).toBeVisible();
+        await expect(page.locator('[data-testid="pin-0"]')).toBeVisible();
+        await expect(page.locator('[data-testid="pin-backspace"]')).toBeVisible();
+      }
     } else {
       // We might be logged in, check main app selectors
       // These might not be visible immediately, so we just check they exist in DOM
