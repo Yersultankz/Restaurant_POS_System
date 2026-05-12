@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Stable Selectors Test', () => {
   test('Verify stable selectors are present', async ({ page }) => {
-    await page.goto('http://localhost:5173');
+    await page.goto('/');
 
     // Wait for the page to load
     await page.waitForLoadState('networkidle');
