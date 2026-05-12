@@ -30,9 +30,20 @@ jobs:
       working-directory: ./backend
       run: npm run build
 
+    - name: Prepare Test Database
+      working-directory: ./backend
+      run: |
+        mkdir -p database
+        npx prisma db push --schema src/models/prisma/schema.prisma --accept-data-loss
+      env:
+        DATABASE_URL: "file:./database/test.db"
+
     - name: Run backend tests
       working-directory: ./backend
       run: npm test
+      env:
+        NODE_ENV: test
+        TEST_DATABASE_URL: "file:./database/test.db"
 
     # --- Frontend CI ---
     - name: Install frontend dependencies
