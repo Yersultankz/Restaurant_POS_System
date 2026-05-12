@@ -25,10 +25,13 @@ import { databaseConfig, testDatabaseConfig } from './config/database';
 const isTest = process.env.NODE_ENV === 'test';
 const dbConfig = isTest ? testDatabaseConfig : databaseConfig;
 
-const adapter = new PrismaBetterSqlite3({
-  url: dbConfig.url
-});
-const prisma = new PrismaClient({ adapter });
+const prisma = isTest 
+  ? new PrismaClient() 
+  : new PrismaClient({ 
+      adapter: new PrismaBetterSqlite3({
+        url: dbConfig.url
+      })
+    });
 
 const app = express();
 const httpServer = http.createServer(app);
