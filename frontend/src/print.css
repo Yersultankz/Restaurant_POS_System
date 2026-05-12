@@ -1,0 +1,83 @@
+/* ─── RECEIPT PRINT STYLES ──────────────────────────────────────────────────
+   This file is ONLY applied when window.print() is called.
+   Target: 80mm thermal paper (approx 302px wide at 96dpi)
+─────────────────────────────────────────────────────────────────────────── */
+
+@media print {
+  /* 1. Global Reset */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* 2. The Robust Hiding Logic */
+  /* Hide all elements by default */
+  .no-print, 
+  nav, 
+  header, 
+  main, 
+  aside, 
+  section,
+  .grid-pos {
+    display: none !important;
+  }
+
+  /* 3. Ensure receipt container and its content is visible */
+  /* We force the receipt container to be visible even if it's inside a hidden parent */
+  /* BUT it's better if it's a direct child of body or #root */
+  
+  .receipt-container {
+    display: block !important;
+    visibility: visible !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 72mm !important;
+    margin: 0 !important;
+    padding: 4mm 2mm !important;
+    background: white !important;
+    color: black !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    z-index: 9999 !important;
+  }
+
+  /* Re-enable parents of the receipt if they were hidden */
+  /* This is the key: if the receipt is nested, we must show its path */
+  #root, 
+  .grid-pos:has(.receipt-container),
+  main:has(.receipt-container),
+  section:has(.receipt-container) {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  .receipt-container * {
+    visibility: visible !important;
+    color: black !important;
+  }
+
+  /* 4. Formatting for Thermal Paper */
+  .receipt-container .flex {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .kitchen-ticket {
+    border: 2px solid black !important;
+    padding: 5mm !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+}

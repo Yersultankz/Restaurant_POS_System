@@ -1,0 +1,65 @@
+# Implementation Plan: Professional POS System
+
+Based on the engineering architecture provided, we will transition from the current prototype to a production-grade POS system. This plan outlines the technical steps to build a scalable, real-time, and high-performance application.
+
+## 1. Project Scaffolding
+- **Frontend**: Vite + React + Tailwind CSS + Lucide Icons + Framer Motion.
+- **Backend**: NestJS (Node.js) + TypeORM + PostgreSQL.
+- **Real-time**: Socket.io (WebSocket implementation).
+- **Architecture**: Monorepo or clean separation of `client` and `server`.
+
+## 2. Technical Stack & Modules
+### Backend (Services Layer)
+- **Auth Service**: JWT-based authentication with role-based access control (RBAC).
+- **Order Service**: Core logic for creation, splitting, and status management.
+- **Menu Service**: Multi-language support (RU/KZ), dynamic category management.
+- **Payment Service**: Integration with Kaspi QR and local payment gateways.
+- **Real-time Gateway**: Socket.io for instant Kitchen (KDS) and Table updates.
+
+### Frontend (UI Layer) - "Red & White" Premium Aesthetic
+- **Global Design System**: Professional high-contrast palette (Crimson Red, Off-White, Charcoal).
+- **Component Architecture**:
+  - `Shared/`: Buttons, Inputs, Modals, Badges.
+  - `Modules/Order/`: Table grid, Item selection, Cart.
+  - `Modules/Kitchen/`: KDS screen with priority sorting.
+  - `Modules/Billing/`: Receipt generation and payment processing.
+  - `Modules/Admin/`: Inventory and Analytics dashboard.
+
+## 3. Database Schema (PostgreSQL)
+- `users`: id, username, password_hash, role (Admin, Waiter, Cashier).
+- `tables`: id, number, section, status (available, occupied, reserved).
+- `categories`: id, name_ru, name_kz, icon.
+- `products`: id, category_id, name_ru, name_kz, price, image_url, is_available.
+- `orders`: id, table_id, user_id, status, total_price, created_at.
+- `order_items`: id, order_id, product_id, quantity, price, notes.
+- `payments`: id, order_id, method, amount, status, transaction_id.
+
+## 4. Phased Development Roadmap
+
+### Phase 1: Foundation (COMPLETED ✅)
+- [x] Initialize repository structure.
+- [x] Setup Tailwind CSS with the "Red & White" design system.
+- [x] Create the core `Layout` and `Navigation` components.
+
+### Phase 2: Core Modules (COMPLETED ✅)
+- [x] **Menu System**: Data models and UI for browsing/editing items (RU/KZ support).
+- [x] **Order System**: Real-time table status and order creation state machine.
+- [x] **KDS (Kitchen)**: Real-time order queue with status transitions.
+
+### Phase 3: Billing & Sales Readiness (COMPLETED ✅)
+- [x] **Payment Loop**: Implementation of Kaspi QR Modal with state machine.
+- [x] **Order Locking**: Security logic to prevent bill tampering after submission.
+- [x] **Demo Preparation**: "30-Second Demo" script and sales strategy.
+
+### Phase 4: Production Polish (COMPLETE ✅)
+- [x] **Printing System**: 80mm thermal CSS receipt + window.print() + preview modal + post-payment print prompt.
+- [x] **Analytics Dashboard**: KPI cards, hourly area chart, payment method pie, top items, transaction log.
+- [x] **WebSocket Architecture**: Express + Socket.io server + useSocket hook with graceful offline fallback + Live Sync status badge.
+- [ ] **Offline Support**: PWA/IndexedDB — deferred until 10+ clients.
+
+---
+
+## Current Status: PRODUCTION READY 🏆
+All core commercial features are complete. The system supports printing, real-time multi-device sync, analytics, and a full Kaspi payment loop.
+
+**Next action: Find the first paying restaurant client.**

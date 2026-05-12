@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.production
+uploads/
+dev.db
+prisma/dev.db
+database/*.db
+*.log
