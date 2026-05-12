@@ -3,7 +3,11 @@ import { httpServer } from '../src/app';
 
 describe('Health endpoint', () => {
   afterAll((done) => {
-    httpServer.close(done);
+    if (httpServer && httpServer.listening) {
+      httpServer.close(done);
+    } else {
+      done();
+    }
   });
 
   it('should return status ok', async () => {
