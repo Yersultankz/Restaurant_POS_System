@@ -5,7 +5,6 @@ dotenv.config();
 
 import path from 'path';
 import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import http from 'http';
 import { Server } from 'socket.io';
 
@@ -22,13 +21,7 @@ import { errorMiddleware } from './middleware/error.middleware';
 import { databaseConfig, testDatabaseConfig } from './config/database';
 
 // Prisma adapter initialization
-const isTest = process.env.NODE_ENV === 'test';
-const dbConfig = isTest ? testDatabaseConfig : databaseConfig;
-
-const adapter = new PrismaBetterSqlite3({
-  url: isTest ? 'file:./database/test.db' : dbConfig.url
-});
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient();
 
 const app = express();
 const httpServer = http.createServer(app);

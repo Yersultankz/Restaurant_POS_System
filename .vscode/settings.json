@@ -1,3 +1,14 @@
 {
-    "workbench.colorTheme": "Abyss"
+    "workbench.colorTheme": "Abyss",
+    "launch": {
+        "configurations": [
+            {
+                "name": "Attach to Chrome",
+                "port": 9222,
+                "request": "attach",
+                "type": "chrome",
+                "webRoot": "${workspaceFolder}"
+            }
+        ]
+    }
 }
