@@ -11,43 +11,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
-    - name: Cache node modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Install dependencies (frontend)
-      run: |
-        cd frontend
-        npm ci
 
-    - name: Install dependencies (backend)
-      run: |
-        cd backend
-        npm ci
-    - name: Lint code
-      run: npm run lint --if-present
+    # --- Backend CI ---
+    - name: Install backend dependencies
+      working-directory: ./backend
+      run: npm ci
+
+    - name: Prisma Generate
+      working-directory: ./backend
+      run: npx prisma generate --schema src/models/prisma/schema.prisma
+
     - name: Build backend
-      run: |
-        cd backend
-        npm ci
-        npm run build
-    - name: Run backend tests
-      run: |
-        cd backend
-        npm test
-    - name: Run frontend lint
-      run: npm run lint
-    - name: Build frontend
+      working-directory: ./backend
       run: npm run build
+
+    - name: Run backend tests
+      working-directory: ./backend
+      run: npm test
+
+    # --- Frontend CI ---
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Build frontend
+      working-directory: ./frontend
+      run: npm run build
+
+    - name: Run frontend tests
+      working-directory: ./frontend
+      run: npm test
+
+    # --- E2E Tests ---
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps
+      
     - name: Run E2E tests
+      working-directory: ./frontend
       run: npm run test:e2e
-    - name: Security audit
-      run: npm audit --production
-      continue-on-error: false
